@@ -1,6 +1,6 @@
 NAME		= computor
 CXX			= clang++
-CXXFLAGS 	= -Wall -Wextra -Werror
+CXXFLAGS	= -Wall -Wextra -Werror
 RM			= rm -rf
 
 SRCS_DIR	= source
