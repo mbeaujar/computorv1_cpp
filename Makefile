@@ -4,7 +4,9 @@ CXXFLAGS	= -Wall -Wextra -Werror
 RM			= rm -rf
 
 SRCS_DIR	= source
-SRCS_FILE	= main.cpp
+SRCS_FILE	= main.cpp \
+					Solver.cpp \
+					Term.cpp
 SRCS		= $(addprefix $(SRCS_DIR)/, $(SRCS_FILE))
 
 OBJS_DIR	= .object
