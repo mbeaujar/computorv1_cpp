@@ -2,11 +2,26 @@
 
 #include "Solver.hpp"
 
-int main() {
-  Solver *a = new Solver();
-  std::string eq = "5.6 * X^1 + 0 * X^0 = 0 * X^0";
-  a->parseEquation(eq);
-  a->displayEquation();
-  delete a;
-  return 0;
+#define SUCCESS 0
+#define FAILURE 1
+
+int main(int argc, char **argv) {
+  if (argc == 2) {
+    Solver *computor;
+
+    try {
+      computor = new Solver();
+    } catch (const std::exception &e) {
+      std::cout << "Error: " << e.what() << std::endl;
+      return FAILURE;
+    }
+    computor->parseEquation(argv[1]);
+    computor->reduceForm();
+    computor->solve();
+    delete computor;
+    return SUCCESS;
+  } else {
+    std::cout << "Error: wrong number of arguments" << std::endl;
+  }
+  return FAILURE;
 }
