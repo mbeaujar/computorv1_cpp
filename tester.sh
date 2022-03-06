@@ -21,7 +21,6 @@ if [ ! -f ./computor ]; then
 fi
 
 i=0
-
 function test_with_inputs() {
 	inputs=("$@")
 	for input in "${inputs[@]}";
@@ -40,12 +39,18 @@ subjects=(
 	"3 * X^0 + 1 * X^1 = 0 * X^0 - 1 * X^1 - 3 * X^2" # Example in the video
 )
 
-secondDegreeNegative=(
+second_negative=(
 	"1 * X^2 - 3 * X^1 + 4 * X^0"
 	"3 * X^2 + 4 * X^1 + 2 * X^0"
 	"1 * X^2 - 4 * X^1 + 9 * X^0"
 )
 
+all_tests=("${subjects[@]}" "${second_negative[@]}")
 
-test_with_inputs "${secondDegreeNegative[@]}"
+for test in "${all_tests[@]}";
+do
+	test_with_inputs "$test"
+done
+
+# test_with_inputs "${second_negative[@]}"
 # test_with_inputs "${subjects[@]}"
