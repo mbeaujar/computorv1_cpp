@@ -18,6 +18,10 @@ void Solver::parseTerm(Member& l, Operators left, std::string& eq, size_t& i) {
   j = skip_number(eq, i);
   int power = std::stoi(eq.substr(i, j - i), &j);
   i += j;
+  if (left == MINUS && number < 0) {
+    left = PLUS;
+    number *= -1;
+  }
   l.push_back(Term(left, number, power));
 }
 
@@ -88,9 +92,13 @@ void Solver::eraseDuplicates() {
     while (tmp != ite) {
       if (tmp->power == power && tmp->value != 0) {
         double first = buildNumber(it->left, it->value);
-        if (tmp->left == MINUS)
+        if (tmp->left == MINUS) {
           it->value = first - tmp->value;
-        else if (tmp->left == PLUS)
+          if (it->value < 0) {
+            it->value *= -1;
+            it->left = PLUS;
+          }
+        } else if (tmp->left == PLUS)
           it->value = first + tmp->value;
         tmp->value = 0;
       }
@@ -112,7 +120,6 @@ void Solver::shiftToFirst() {
   Member::iterator it = _second.begin(), ite = _second.end();
 
   while (it != ite) {
-    if (it->value == 0) _second.erase(it);
     if (it->left == PLUS || it->left == NONE)
       it->left = MINUS;
     else if (it->left == MINUS)

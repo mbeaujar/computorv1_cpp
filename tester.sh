@@ -39,31 +39,46 @@ subjects=(
 	"3 * X^0 + 1 * X^1 = 0 * X^0 - 1 * X^1 - 3 * X^2" # Example in the video
 )
 
+
+first=(
+	"5 * X^1 - 4 * X^0 = 0 * X^0"
+	"8 * X^1 + 20 * X^0 = 0 * X^0"
+	"1 * X^1 = 10 * X^0"
+	"1 * X^1 - 10 * X^0 = 100 * X^1 + 100 * X^0" 
+)
+
 second_positive=(
-	"1 * X^2 - 11 * X^1 + 30 * X^0"
-	"4 * X^2 + 11 * X^1 - 3 * X^0"
-	"2 * X^2 + 8 * X^1 - 16 * X^0"
-	"1 * X^2 - 4 * X^1 - 21 * X^0"
+	"1 * X^2 - 11 * X^1 + 30 * X^0 = 0 * X^0"
+	"4 * X^2 + 11 * X^1 - 3 * X^0 = 0 * X^0"
+	"2 * X^2 + 8 * X^1 - 16 * X^0 = 0 * X^0"
+	"1 * X^2 - 4 * X^1 - 21 * X^0 = 0 * X^0"
 )
 
 second_neutral=(
-
+	"1 * X^2 - 6 * X^1 + 9 * X^0 = 0 * X^0"
+	"1 * X^2 - 2 * X^1 + 1 * X^0 = 0 * X^0"
+	"4 * X^2 + 32 * X^1 + 64 * X^0 = 0 * X^0"
 )
 
 second_negative=(
-	"1 * X^2 - 3 * X^1 + 4 * X^0"
-	"3 * X^2 + 4 * X^1 + 2 * X^0"
-	"1 * X^2 - 4 * X^1 + 9 * X^0"
-	"3 * X^2 + 2 * X^1 + 4 * X^0"
-	"1 * X^2 - 1 * X^1 + 30 * X^0"
+	"1 * X^2 - 3 * X^1 + 4 * X^0 = 0 * X^0"
+	"3 * X^2 + 4 * X^1 + 2 * X^0 = 0 * X^0"
+	"1 * X^2 - 4 * X^1 + 9 * X^0 = 0 * X^0"
+	"3 * X^2 + 2 * X^1 + 4 * X^0 = 0 * X^0"
+	"1 * X^2 - 1 * X^1 + 30 * X^0 = 0 * X^0"
 )
 
-all_tests=("${subjects[@]}" "${second_negative[@]}" "${second_positive[@]}")
+function all_test() {
+	all_tests=("$@")
+	for test in "${all_tests[@]}";
+	do
+		# echo "$test"
+		test_with_inputs "$test"
+	done
+}
 
-for test in "${all_tests[@]}";
-do
-	test_with_inputs "$test"
-done
+# all_test "${subjects[@]}" "${second_negative[@]}" "${second_positive[@]}" "${second_neutral[@]}"
 
-# test_with_inputs "${second_negative[@]}"
 # test_with_inputs "${subjects[@]}"
+test_with_inputs "${first[@]}"
+# test_with_inputs "${second_negative[@]}"
