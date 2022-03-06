@@ -26,9 +26,9 @@ function test_with_inputs() {
 	for input in "${inputs[@]}";
 	do
 		i=$(($i + 1))
+		printf "\n"
 		printf "${YELLOW}$i${NC} -- $input\n\n"
 		./computor "$input"
-		printf "\n"
 	done
 }
 
@@ -39,13 +39,26 @@ subjects=(
 	"3 * X^0 + 1 * X^1 = 0 * X^0 - 1 * X^1 - 3 * X^2" # Example in the video
 )
 
+second_positive=(
+	"1 * X^2 - 11 * X^1 + 30 * X^0"
+	"4 * X^2 + 11 * X^1 - 3 * X^0"
+	"2 * X^2 + 8 * X^1 - 16 * X^0"
+	"1 * X^2 - 4 * X^1 - 21 * X^0"
+)
+
+second_neutral=(
+
+)
+
 second_negative=(
 	"1 * X^2 - 3 * X^1 + 4 * X^0"
 	"3 * X^2 + 4 * X^1 + 2 * X^0"
 	"1 * X^2 - 4 * X^1 + 9 * X^0"
+	"3 * X^2 + 2 * X^1 + 4 * X^0"
+	"1 * X^2 - 1 * X^1 + 30 * X^0"
 )
 
-all_tests=("${subjects[@]}" "${second_negative[@]}")
+all_tests=("${subjects[@]}" "${second_negative[@]}" "${second_positive[@]}")
 
 for test in "${all_tests[@]}";
 do
