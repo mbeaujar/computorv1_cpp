@@ -18,10 +18,6 @@ void Solver::parseTerm(Member& l, Operators left, std::string& eq, size_t& i) {
   j = skip_number(eq, i);
   int power = std::stoi(eq.substr(i, j - i), &j);
   i += j;
-  // if (left == MINUS && number < 0) {
-  //   left = PLUS;
-  //   number *= -1;
-  // }
   l.push_back(Term(left, number, power));
 }
 
@@ -91,14 +87,12 @@ void Solver::eraseDuplicates() {
     Member::iterator tmp = it + 1;
     while (tmp != ite) {
       if (tmp->power == power && tmp->value != 0) {
-        std::cout << "left is minus: " << (it->left == MINUS) << std::endl;
-        std::cout << "value: " << it->value << std::endl;
         double first = buildNumber(it->left, it->value);
         if (tmp->left == MINUS) {
           it->value = first - tmp->value;
-          if (it->value < 0) {
+          if (it->value < 0 && it->left == PLUS) {
             it->value *= -1;
-            it->left = PLUS;
+            it->left = MINUS;
           }
         } else if (tmp->left == PLUS)
           it->value = first + tmp->value;
@@ -139,7 +133,7 @@ void Solver::shiftToFirst() {
 void Solver::reduceForm() {
   std::cout << "Reduced form: ";
   shiftToFirst();
-  // eraseDuplicates();
+  eraseDuplicates();
   iterateEquation(_first, &Solver::displayTerm);
   if (_first.size() == 0) std::cout << "0 ";
   std::cout << "= 0" << std::endl;
