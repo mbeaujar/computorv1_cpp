@@ -3,6 +3,9 @@
 # calculator quadratic equation
 # https://www.calculatorsoup.com/calculators/algebra/quadratic-formula-calculator.php
 
+# calculator first degree equation
+# https://www.123calculus.com/en/first-degree-equation-page-1-25-100.html
+
 # Tuto script bash
 # https://askubuntu.com/questions/674333/how-to-pass-an-array-as-function-argument
 
@@ -44,7 +47,7 @@ first=(
 	"5 * X^1 - 4 * X^0 = 0 * X^0"
 	"8 * X^1 + 20 * X^0 = 0 * X^0"
 	"1 * X^1 = 10 * X^0"
-	"1 * X^1 - 10 * X^0 = 100 * X^1 + 100 * X^0" 
+	"1 * X^1 - 10 * X^0 = 100 * X^1 + 100 * X^0"
 )
 
 second_positive=(
@@ -68,6 +71,20 @@ second_negative=(
 	"1 * X^2 - 1 * X^1 + 30 * X^0 = 0 * X^0"
 )
 
+three=(
+	"3 * X^3 + 2 * X^2 = 1 * X^1 + 2 * X^0"
+)
+
+infinite_solution=(
+	"2 * X^1 + 3 * X^0 = 2 * X^1 + 3 * X^0"
+	"42 * X^0 = 42 * X^0"
+)
+
+no_solution=(
+	"42 * X^0 = 43 * X^0"
+	"20 * X^1 + 42 * X^0 = 20 * X^1  + 10 * X^0"
+)
+
 function all_test() {
 	all_tests=("$@")
 	for test in "${all_tests[@]}";
@@ -77,8 +94,8 @@ function all_test() {
 	done
 }
 
-# all_test "${subjects[@]}" "${second_negative[@]}" "${second_positive[@]}" "${second_neutral[@]}"
+all_test "${subjects[@]}" "${second_negative[@]}" "${second_positive[@]}" "${second_neutral[@]}" "${first[@]}" "${three[@]}"
 
 # test_with_inputs "${subjects[@]}"
-test_with_inputs "${first[@]}"
+# test_with_inputs "${first[@]}"
 # test_with_inputs "${second_negative[@]}"
