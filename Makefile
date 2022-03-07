@@ -6,7 +6,8 @@ RM			= rm -rf
 SRCS_DIR	= source
 SRCS_FILE	= main.cpp \
 					Solver.cpp \
-					Term.cpp
+					Term.cpp \
+					Parser.cpp
 SRCS		= $(addprefix $(SRCS_DIR)/, $(SRCS_FILE))
 
 OBJS_DIR	= .object
