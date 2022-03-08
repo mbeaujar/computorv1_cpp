@@ -51,19 +51,6 @@ Parser::Parser(std::string eq) : _left(NONE), _first(), _second(), _degree(0) {
     throw InvalidFormatEntry("Invalid operator at the end");
   if (firstMember == true)
     throw InvalidFormatEntry("Invalid format (equal sign missing)");
-
-  Member::iterator it = _first.begin(), ite = _first.end();
-  while (it != ite) {
-    std::cout << *it << " ";
-    ++it;
-  }
-  std::cout << "= ";
-  it = _second.begin(), ite = _second.end();
-  while (it != ite) {
-    std::cout << *it << " ";
-    ++it;
-  }
-  std::cout << std::endl;
 }
 
 Parser::~Parser() {}
@@ -146,3 +133,9 @@ int Parser::parsePower(std::string& eq, size_t& i) {
   }
   return power;
 }
+
+Member& Parser::getFirst() { return _first; }
+
+Member& Parser::getSecond() { return _second; }
+
+int Parser::getDegree() const { return _degree; }

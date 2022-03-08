@@ -1,7 +1,6 @@
 #ifndef _PARSER_HPP_
 #define _PARSER_HPP_
 
-// #include <ctype>
 #include <deque>
 #include <sstream>
 #include <string>
@@ -9,23 +8,6 @@
 #include "Term.hpp"
 
 #define Member std::deque<Term>
-
-// Entries:
-// 5 -> 5 * X^0
-// 4 * X -> 4 * X^1
-// X^2 -> 1 * X^2
-
-// 1 Example
-// 5 + 4 * X + X^2= X^2
-
-// 2 Example
-// 5 * X^0 + 4 * X^1 - 9.3 * X^2 = 1 * X^0
-
-// 3 Example
-// - 3 * X^2 + 5 * X^1 = 1 * X^0
-
-// 5 + x * 2 = 20
-// 5 + x = 10
 
 class Parser {
  public:
@@ -44,6 +26,10 @@ class Parser {
    private:
     const char* _reason;
   };
+
+  Member& getFirst();
+  Member& getSecond();
+  int getDegree() const;
 
  private:
   Operators _left;

@@ -8,7 +8,7 @@
 
 int main(int argc, char **argv) {
   if (argc == 2) {
-    // Solver *computor;
+    Solver *computor;
     Parser *parsing;
 
     try {
@@ -17,17 +17,20 @@ int main(int argc, char **argv) {
       std::cout << "Error: " << e.what() << std::endl;
       return FAILURE;
     }
-    // try {
-    //   computor = new Solver();
-    // } catch (const std::exception &e) {
-    //   std::cout << "Error: " << e.what() << std::endl;
-    //   return FAILURE;
-    // }
-    // computor->parseEquation(argv[1]);
-    // computor->reduceForm();
-    // computor->solve();
-    // delete computor;
-    // return SUCCESS;
+    try {
+      computor = new Solver(parsing->getFirst(), parsing->getSecond(),
+                            parsing->getDegree());
+    } catch (const std::exception &e) {
+      std::cout << "Error: " << e.what() << std::endl;
+      delete parsing;
+      return FAILURE;
+    }
+    computor->reduceForm();
+    computor->degree();
+    computor->solve();
+    delete computor;
+    delete parsing;
+    return SUCCESS;
   } else {
     std::cout << "Error: wrong number of arguments" << std::endl;
   }

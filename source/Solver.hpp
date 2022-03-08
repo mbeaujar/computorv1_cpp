@@ -1,40 +1,26 @@
 #ifndef _SOLVER_HPP_
 #define _SOLVER_HPP_
 
-#include <cmath>
-#include <deque>
-#include <iostream>
-#include <string>
-
-#include "Term.hpp"
-
-#define Member std::deque<Term>
+#include "Parser.hpp"
 
 class Solver {
  public:
-  Solver();
+  Solver(Member& first, Member& second, int degree);
   ~Solver();
 
-  size_t skip_number(std::string&, size_t);
-  void parseTerm(Member&, Operators, std::string&, size_t&);
-  void parseEquation(std::string);
-  void iterateEquation(Member&, void (Solver::*f)(Member::iterator&));
-  void displayTerm(Member::iterator&);
-  void searchDegree(Member::iterator&);
-  void displayEquation();
-
-  double findNumberWithPower(int);
-  void eraseDuplicates();
-  void shiftToFirst();
   void reduceForm();
-  void solveFirstDegree();
-  void solveSecondDegree();
+  void degree();
   void solve();
 
  private:
+  Member& _first;
+  Member& _second;
   int _degree;
-  Member _first;
-  Member _second;
+
+  void eraseDuplicates();
+  void shiftSecondToFirst();
+  double findNumberWithPower(int power);
+  double mysqrt(double num);
 };
 
 #endif  // _SOLVER_HPP_
