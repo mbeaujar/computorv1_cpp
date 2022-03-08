@@ -17,6 +17,7 @@ class Solver {
   Member& _second;
   int _degree;
 
+  void simplifyOperators(Member& side);
   void eraseDuplicates();
   void shiftSecondToFirst();
   double findNumberWithPower(int power);

@@ -6,13 +6,21 @@ Solver::Solver(Member& first, Member& second, int degree)
 Solver::~Solver() {}
 
 void Solver::reduceForm() {
+  simplifyOperators(_first);
+  simplifyOperators(_second);
   shiftSecondToFirst();
   eraseDuplicates();
+  if (_first.size() > 0 && _first[0].left != MINUS) _first[0].left = NONE;
   std::cout << "Reduced form: ";
   Member::iterator it = _first.begin(), ite = _first.end();
-  while (it != ite) {
-    std::cout << *it << " ";
-    ++it;
+
+  if (it != ite) {
+    while (it != ite) {
+      std::cout << *it << " ";
+      ++it;
+    }
+  } else {
+    std::cout << "0 ";
   }
   std::cout << "= 0" << std::endl;
 }
@@ -66,10 +74,35 @@ void Solver::solve() {
       std::cout << realPart << " + i * " << imaginaryPart << std::endl;
       std::cout << realPart << " - i * " << imaginaryPart << std::endl;
     }
-  } else {
+  } else if (_degree > 2) {
     std::cout
         << "The polynomial degree is strictly greater than 2, I can't solve."
         << std::endl;
+  }
+}
+
+// 1 * 2 * 2 * 2
+
+// 1 * 2 + 5
+
+void Solver::simplifyOperators(Member& side) {
+  Member::iterator it = side.begin(), ite = side.end();
+
+  while (it != ite) {
+    if (it->left == MUL) {
+      Member::iterator tmp = it + 1, target = it - 1;
+
+      target->value *= it->value;
+      it->value = 0;
+      if (tmp != ite && tmp->left == MUL) {
+        while (tmp != ite && tmp->left == MUL) {
+          target->value *= tmp->value;
+          tmp->value = 0;
+          ++tmp;
+        }
+      }
+    }
+    ++it;
   }
 }
 

@@ -82,7 +82,11 @@ infinite_solution=(
 
 no_solution=(
 	"42 * X^0 = 43 * X^0"
-	# "20 * X^1 + 42 * X^0 = 20 * X^1  + 10 * X^0"
+	"20 * X^1 + 42 * X^0 = 20 * X^1  + 10 * X^0"
+)
+
+multiplication=(
+	"1x * 2x^2 = 1000000"
 )
 
 function all_test() {
@@ -96,7 +100,8 @@ function all_test() {
 
 # all_test "${subjects[@]}" "${second_negative[@]}" "${second_positive[@]}" "${second_neutral[@]}" "${first[@]}" "${three[@]}"
 
-test_with_inputs "${no_solution[@]}"
+# test_with_inputs "${no_solution[@]}"
 # test_with_inputs "${subjects[@]}"
+test_with_inputs "${multiplication[@]}"
 # test_with_inputs "${first[@]}"
 # test_with_inputs "${second_negative[@]}"

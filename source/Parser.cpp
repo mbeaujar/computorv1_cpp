@@ -7,7 +7,7 @@ bool isCharacterValid(char c) {
          c == '^' || c == 'x' || c == 0;
 }
 
-Parser::Parser(std::string eq) : _left(NONE), _first(), _second(), _degree(0) {
+Parser::Parser(std::string eq) : _left(NONE), _first(), _second(), _degree(1) {
   bool firstMember = true;
   bool isOnOperator = false;
 
@@ -51,6 +51,19 @@ Parser::Parser(std::string eq) : _left(NONE), _first(), _second(), _degree(0) {
     throw InvalidFormatEntry("Invalid operator at the end");
   if (firstMember == true)
     throw InvalidFormatEntry("Invalid format (equal sign missing)");
+
+  Member::iterator it = _first.begin(), ite = _first.end();
+  while (it != ite) {
+    std::cout << *it << " ";
+    ++it;
+  }
+  std::cout << "= ";
+  it = _second.begin(), ite = _second.end();
+  while (it != ite) {
+    std::cout << *it << " ";
+    ++it;
+  }
+  std::cout << std::endl;
 }
 
 Parser::~Parser() {}
@@ -70,13 +83,24 @@ void Parser::setOperator(char c) {
       _left = MUL;
       break;
     default:
-      throw std::invalid_argument("character not valid");
+      throw InvalidFormatEntry("Invalid Character");
   }
 }
 
 size_t skip_number(std::string& eq, size_t i) {
-  while (i < eq.length() && isdigit(eq[i])) i++;
-  return i;
+  int point = 0;
+  size_t j = 0;
+
+  while (i + j < eq.length() && (isdigit(eq[i + j]) || eq[i + j] == '.')) {
+    if (eq[i + j] == '.') {
+      if (j == 0 || i + j + 1 == eq.length() ||
+          isdigit(eq[i + j + 1]) == false || point > 0)
+        throw Parser::InvalidFormatEntry("Invalid character in float number");
+      point++;
+    }
+    j++;
+  }
+  return i + j;
 }
 
 void Parser::parseTerm(Member& side, std::string& eq, size_t& i) {
@@ -85,34 +109,39 @@ void Parser::parseTerm(Member& side, std::string& eq, size_t& i) {
   int power = 0;
   bool isOnOperator = false;
 
-  for (size_t j = i + after_nb; j < eq.length(); j++) {
-    if (!isCharacterValid(eq[j]))
-      throw InvalidFormatEntry("Invalid character in term");
-    if (isOperator(eq[j]) || eq[j] == '=') {
-      if (isOnOperator == true)
-        throw InvalidFormatEntry("Invalid format (no term between operators)");
-      isOnOperator = true;
-      if (eq[j] != '*') {
-        i = j - 1;
-        break;
-      } else {
-        size_t c = j + 1;
-        while (c < eq.length() && isspace(eq[c])) c++;
-        if (eq[c] == '*')
+  if (i + after_nb < eq.length()) {
+    for (size_t j = i + after_nb; j < eq.length(); j++) {
+      if (!isCharacterValid(eq[j]))
+        throw InvalidFormatEntry("Invalid character in term");
+      if (isOperator(eq[j]) || eq[j] == '=') {
+        if (isOnOperator == true)
           throw InvalidFormatEntry(
               "Invalid format (no term between operators)");
-        if (eq[c] != 'X' && eq[c] != 'x') {
+        isOnOperator = true;
+        if (eq[j] != '*') {
           i = j - 1;
           break;
+        } else {
+          size_t c = j + 1;
+          while (c < eq.length() && isspace(eq[c])) c++;
+          if (eq[c] == '*')
+            throw InvalidFormatEntry(
+                "Invalid format (no term between operators)");
+          if (eq[c] != 'X' && eq[c] != 'x') {
+            i = j - 1;
+            break;
+          }
         }
       }
-    }
 
-    if (eq[j] == 'X' || eq[j] == 'x') {
-      power = parsePower(eq, ++j);
-      i = j;
-      break;
+      if (eq[j] == 'X' || eq[j] == 'x') {
+        power = parsePower(eq, ++j);
+        i = j;
+        break;
+      }
     }
+  } else {
+    i += after_nb;
   }
   if (power > _degree) _degree = power;
   side.push_back(Term(_left, value, power));
