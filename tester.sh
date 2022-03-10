@@ -30,7 +30,7 @@ function test_with_inputs() {
 	do
 		i=$(($i + 1))
 		printf "\n"
-		printf "${YELLOW}$i${NC} -- $input\n\n"
+		printf "${YELLOW}$i${NC} --> $input\n\n"
 		./computor "$input"
 	done
 }
@@ -78,15 +78,37 @@ three=(
 infinite_solution=(
 	"2 * X^1 + 3 * X^0 = 2 * X^1 + 3 * X^0"
 	"42 * X^0 = 42 * X^0"
+	"0 * 0 = 0"
 )
 
 no_solution=(
 	"42 * X^0 = 43 * X^0"
 	"20 * X^1 + 42 * X^0 = 20 * X^1  + 10 * X^0"
+	"1 * 1 = 0"
 )
 
 multiplication=(
 	"1x * 2x^2 = 1000000"
+	"2 * 2 * 2 + 6x = 8"
+	"80 = 14x * 4 * 5"
+	"1x * 2x = 80"
+	"1x * 2x = 40 * 2"
+)
+
+fraction=(
+	"1/2x - 1/3 = 80"
+	"1/2x * 1/2x + 80 = -60"
+	"6/0x = 6"
+	"6/0 = 6"
+	"0/6 = 0"
+)
+
+parsing=(
+	"2 / 6 = 0"
+	"1+1+1+1+1+ = 5"
+	"+ 5 = 5"
+	"0 - - 5 = 5"
+	"1x^ + 5 = 0"
 )
 
 function all_test() {
@@ -102,6 +124,9 @@ function all_test() {
 
 # test_with_inputs "${no_solution[@]}"
 # test_with_inputs "${subjects[@]}"
-test_with_inputs "${multiplication[@]}"
+# test_with_inputs "${multiplication[@]}"
+# test_with_inputs "${fraction[@]}"
+# test_with_inputs "${parsing[@]}"
 # test_with_inputs "${first[@]}"
 # test_with_inputs "${second_negative[@]}"
+# test_with_inputs "${second_positive[@]}"

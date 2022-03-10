@@ -1,6 +1,6 @@
 #include "Parser.hpp"
 
-bool isOperator(char c) { return c == '+' || c == '-' || c == '*' || c == '/'; }
+bool isOperator(char c) { return c == '+' || c == '-' || c == '*'; }
 
 bool isCharacterValid(char c) {
   return isOperator(c) || isdigit(c) || isspace(c) || c == 'X' || c == '=' ||
@@ -52,18 +52,18 @@ Parser::Parser(std::string eq) : _left(NONE), _first(), _second(), _degree(1) {
   if (firstMember == true)
     throw InvalidFormatEntry("Invalid format (equal sign missing)");
 
-  Member::iterator it = _first.begin(), ite = _first.end();
-  while (it != ite) {
-    std::cout << *it << " ";
-    ++it;
-  }
-  std::cout << "= ";
-  it = _second.begin(), ite = _second.end();
-  while (it != ite) {
-    std::cout << *it << " ";
-    ++it;
-  }
-  std::cout << std::endl;
+  // Member::iterator it = _first.begin(), ite = _first.end();
+  // while (it != ite) {
+  //   std::cout << *it << " ";
+  //   ++it;
+  // }
+  // std::cout << "= ";
+  // it = _second.begin(), ite = _second.end();
+  // while (it != ite) {
+  //   std::cout << *it << " ";
+  //   ++it;
+  // }
+  // std::cout << std::endl;
 }
 
 Parser::~Parser() {}
@@ -76,9 +76,9 @@ void Parser::setOperator(char c) {
     case '-':
       _left = MINUS;
       break;
-    case '/':
-      _left = DIV;
-      break;
+    // case '/':
+    //   _left = DIV;
+    //   break;
     case '*':
       _left = MUL;
       break;
@@ -111,6 +111,19 @@ void Parser::parseTerm(Member& side, std::string& eq, size_t& i) {
 
   if (i + after_nb < eq.length()) {
     for (size_t j = i + after_nb; j < eq.length(); j++) {
+      if (eq[j] == '/') {
+        j++;
+        if (eq[j] && !isdigit(eq[j]))
+          throw InvalidFormatEntry("Invalid character after '/'");
+        if (!eq[j]) break;
+        size_t after_deno = skip_number(eq, j);
+        double denominator =
+            std::stod(eq.substr(j, after_deno - j), &after_deno);
+        std::cout << "value: " << value << std::endl;
+        std::cout << "denorminator: " << value << std::endl;
+        if (value != 0) value /= denominator;
+        j += after_deno;
+      }
       if (!isCharacterValid(eq[j]))
         throw InvalidFormatEntry("Invalid character in term");
       if (isOperator(eq[j]) || eq[j] == '=') {

@@ -17,9 +17,13 @@ class Solver {
   Member& _second;
   int _degree;
 
+	void firstDegreeOrLower();
+	void secondDegree();
+  void displayFractions(double numerator, double denumerator);
   void simplifyOperators(Member& side);
   void eraseDuplicates();
   void shiftSecondToFirst();
+  void findDegreeMax();
   double findNumberWithPower(int power);
   double mysqrt(double num);
 };

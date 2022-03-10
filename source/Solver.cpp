@@ -26,54 +26,15 @@ void Solver::reduceForm() {
 }
 
 void Solver::degree() {
+  findDegreeMax();
   std::cout << "Polynomial Degree: " << _degree << std::endl;
 }
 
 void Solver::solve() {
   if (_degree == 1) {
-    double a = findNumberWithPower(1);
-    double b = findNumberWithPower(0);
-
-    if (b != 0) {
-      if (a != 0) {
-        std::cout << "The solution is:" << std::endl;
-        std::cout << ((b * -1) / a) << std::endl;
-      } else {
-        std::cout << "The equation has no solution" << std::endl;
-      }
-    } else {
-      if (a != 0) {
-        std::cout << "The solution is:" << std::endl;
-        std::cout << "0" << std::endl;
-      } else {
-        std::cout << "The equation has an infinitely number of solutions"
-                  << std::endl;
-      }
-    }
+    firstDegreeOrLower();
   } else if (_degree == 2) {
-    double a = findNumberWithPower(2);
-    double b = findNumberWithPower(1);
-    double c = findNumberWithPower(0);
-    double delta = ((b * b) - ((4 * a) * c));
-
-    if (delta == 0) {
-      std::cout << "Discriminant is neutral, the solution is:" << std::endl;
-      std::cout << ((-b / (2 * a))) << std::endl;
-    } else if (delta > 0) {
-      std::cout << "Discriminant is strictly positive, the two solutions are:"
-                << std::endl;
-      std::cout << ((-b - mysqrt(delta)) / (2 * a)) << std::endl;
-      std::cout << ((-b + mysqrt(delta)) / (2 * a)) << std::endl;
-    } else if (delta < 0) {
-      double realPart = -b / (2 * a);
-      double imaginaryPart = mysqrt(-delta) / (2 * a);
-
-      std::cout
-          << "Discriminant is strictly negative, the two complex solutions are:"
-          << std::endl;
-      std::cout << realPart << " + i * " << imaginaryPart << std::endl;
-      std::cout << realPart << " - i * " << imaginaryPart << std::endl;
-    }
+    secondDegree();
   } else if (_degree > 2) {
     std::cout
         << "The polynomial degree is strictly greater than 2, I can't solve."
@@ -81,9 +42,129 @@ void Solver::solve() {
   }
 }
 
-// 1 * 2 * 2 * 2
+void Solver::firstDegreeOrLower() {
+  double a = findNumberWithPower(1);
+  double b = findNumberWithPower(0);
 
-// 1 * 2 + 5
+  if (b != 0) {
+    if (a != 0) {
+      std::cout << "The solution is:" << std::endl;
+      if (b == int(b) && a == int(a)) {
+        displayFractions(-b, a);
+        std::cout << std::endl;
+      } else
+        std::cout << (-b / a) << std::endl;
+    } else {
+      std::cout << "The equation has no solution" << std::endl;
+    }
+  } else {
+    if (a != 0) {
+      std::cout << "The solution is:" << std::endl;
+      std::cout << "0" << std::endl;
+    } else {
+      std::cout << "The equation has an infinitely number of solutions"
+                << std::endl;
+    }
+  }
+}
+
+void Solver::secondDegree() {
+  double a = findNumberWithPower(2);
+  double b = findNumberWithPower(1);
+  double c = findNumberWithPower(0);
+  double numerator, denumerator = (2 * a);
+  double delta = ((b * b) - ((4 * a) * c));
+
+  if (delta == 0) {
+    numerator = -b;
+
+    std::cout << "Discriminant is neutral, the solution is:" << std::endl;
+    if (numerator == int(numerator) && denumerator == int(denumerator))
+      displayFractions(numerator, denumerator);
+    else
+      std::cout << (numerator / denumerator);
+    std::cout << std::endl;
+  } else if (delta > 0) {
+    double secondNumerator = -b + mysqrt(delta);
+    numerator = -b - mysqrt(delta);
+
+    std::cout << "Discriminant is strictly positive, the two solutions are:"
+              << std::endl;
+    if (numerator == int(numerator) && denumerator == int(denumerator) &&
+        secondNumerator == int(secondNumerator)) {
+      displayFractions(numerator, denumerator);
+      std::cout << std::endl;
+      displayFractions(secondNumerator, denumerator);
+      std::cout << std::endl;
+    } else {
+      std::cout << (numerator / denumerator) << std::endl;
+      std::cout << (secondNumerator / denumerator) << std::endl;
+    }
+  } else if (delta < 0) {
+    numerator = -b;
+    double realPart = numerator / denumerator;
+    double imaginaryPart = mysqrt(-delta) / denumerator;
+
+    std::cout
+        << "Discriminant is strictly negative, the two complex solutions are:"
+        << std::endl;
+
+    if (numerator == int(numerator) && denumerator == int(denumerator)) {
+      if (realPart != 0) {
+        displayFractions(numerator, denumerator);
+        std::cout << " + ";
+      }
+      std::cout << "i * " << imaginaryPart << std::endl;
+      if (realPart != 0) displayFractions(numerator, denumerator);
+      std::cout << " - i * " << imaginaryPart << std::endl;
+    } else {
+      if (realPart != 0) std::cout << realPart << " + ";
+      std::cout << "i * " << imaginaryPart << std::endl;
+      if (realPart != 0) std::cout << realPart;
+      std::cout << " - i * " << imaginaryPart << std::endl;
+    }
+  }
+}
+
+void Solver::displayFractions(double numerator, double denumerator) {
+  if (numerator == 0 || denumerator == 0) {
+    std::cout << numerator / denumerator;
+    return;
+  }
+  if (numerator < 0 && denumerator < 0) {
+    numerator *= -1;
+    denumerator *= -1;
+  }
+  double factor = denumerator / numerator;
+  if (abs(numerator) < abs(denumerator)) {
+    double num = numerator > 0 ? 1 : -1;
+    while (num != numerator) {
+      double den = num * factor;
+      if (num == int(num) && den == int(den)) {
+        std::cout << num << "/" << den;
+        return;
+      }
+      if (numerator > 0)
+        num++;
+      else
+        num--;
+    }
+  } else {
+    double den = denumerator > 0 ? 1 : -1;
+    while (den != denumerator) {
+      double num = den / factor;
+      if (num == int(num) && den == int(den)) {
+        std::cout << num << "/" << den;
+        return;
+      }
+      if (denumerator > 0)
+        den++;
+      else
+        den--;
+    }
+  }
+  std::cout << numerator << "/" << denumerator;
+}
 
 void Solver::simplifyOperators(Member& side) {
   Member::iterator it = side.begin(), ite = side.end();
@@ -93,10 +174,12 @@ void Solver::simplifyOperators(Member& side) {
       Member::iterator tmp = it + 1, target = it - 1;
 
       target->value *= it->value;
+      target->power += it->power;
       it->value = 0;
       if (tmp != ite && tmp->left == MUL) {
         while (tmp != ite && tmp->left == MUL) {
           target->value *= tmp->value;
+          target->power += tmp->power;
           tmp->value = 0;
           ++tmp;
         }
@@ -157,6 +240,15 @@ void Solver::shiftSecondToFirst() {
     ++it;
   }
   _second.clear();
+}
+
+void Solver::findDegreeMax() {
+  Member::iterator it = _first.begin(), ite = _first.end();
+
+  while (it != ite) {
+    if (it->power > _degree) _degree = it->power;
+    ++it;
+  }
 }
 
 double Solver::findNumberWithPower(int power) {
