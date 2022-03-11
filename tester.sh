@@ -104,24 +104,6 @@ fraction=(
 	"0/6 = 0"
 )
 
-parsing_mandatory=(
-	# "3x = 5 + 2x"
-	# "3 * X^0 + 1 * X^1 = 0 * X^0 - 1 * X^1 - 3 * X^2" # Example in the video
-	# "2x^2 - 3x + 9/8 = 0"
-	# "1 * X^2 - 11 * X^1 + 30 * X^0 = 0 * X^0"
-	"1 * X^2 - 3 * X^1 + 4 * X^0 = 0 * X^0"
-
-	# "1 * X^2 = 10 * X^1 + 1 * X^0"
-)
-
-parsing=(
-	"2 / 6 = 0"
-	"1+1+1+1+1+ = 5"
-	"+ 5 = 5"
-	"0 - - 5 = 5"
-	"1x^ + 5 = 0"
-)
-
 function all_test() {
 	all_tests=("$@")
 	for test in "${all_tests[@]}";
@@ -131,14 +113,7 @@ function all_test() {
 	done
 }
 
-# all_test "${subjects[@]}" "${second_negative[@]}" "${second_positive[@]}" "${second_neutral[@]}" "${first[@]}" "${three[@]}"
+# all_test "${subjects[@]}" "${first[@]}" "${second_positive[@]}" "${second_neutral[@]}" "${second_negative[@]}" "${three[@]}" "${infinite_solution[@]}" "${no_solution[@]}" "${multiplication[@]}" "${fraction[@]}"
 
-# test_with_inputs "${no_solution[@]}"
-test_with_inputs "${subjects[@]}"
-# test_with_inputs "${multiplication[@]}"
+# test_with_inputs "${subjects[@]}"
 # test_with_inputs "${fraction[@]}"
-# test_with_inputs "${parsing[@]}"
-# test_with_inputs "${first[@]}"
-# test_with_inputs "${parsing_mandatory[@]}"
-# test_with_inputs "${second_negative[@]}"
-# test_with_inputs "${second_positive[@]}"
