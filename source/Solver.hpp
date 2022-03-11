@@ -17,8 +17,11 @@ class Solver {
   Member& _second;
   int _degree;
 
-	void firstDegreeOrLower();
-	void secondDegree();
+  void firstDegreeOrLower();
+  void secondDegreeNeutral(double b, double denumerator);
+  void secondDegreePositive(double b, double delta, double denumerator);
+  void secondDegreeNegative(double b, double delta, double denumerator);
+  void secondDegree();
   void displayFractions(double numerator, double denumerator);
   void simplifyOperators(Member& side);
   void eraseDuplicates();

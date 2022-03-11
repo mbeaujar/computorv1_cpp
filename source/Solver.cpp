@@ -46,14 +46,24 @@ void Solver::firstDegreeOrLower() {
   double a = findNumberWithPower(1);
   double b = findNumberWithPower(0);
 
+#if BONUS
+  std::cout << "a	= " << a << std::endl;
+  std::cout << "b	= " << b << std::endl;
+#endif
+
   if (b != 0) {
     if (a != 0) {
       std::cout << "The solution is:" << std::endl;
+#if BONUS
+      std::cout << "x	= -b/a" << std::endl;
+      std::cout << "x	= ";
       if (b == int(b) && a == int(a)) {
         displayFractions(-b, a);
         std::cout << std::endl;
-      } else
-        std::cout << (-b / a) << std::endl;
+        return;
+      }
+#endif
+      std::cout << (-b / a) << std::endl;
     } else {
       std::cout << "The equation has no solution" << std::endl;
     }
@@ -68,66 +78,123 @@ void Solver::firstDegreeOrLower() {
   }
 }
 
+void Solver::secondDegreeNeutral(double b, double denumerator) {
+  double numerator = -b;
+
+  std::cout << "Discriminant is neutral, the solution is:" << std::endl;
+#if BONUS
+  std::cout << "x0	= -b/2a" << std::endl;
+  std::cout << "x0	= ";
+  if (numerator == int(numerator) && denumerator == int(denumerator)) {
+    displayFractions(numerator, denumerator);
+    return;
+  }
+#endif
+  std::cout << (numerator / denumerator);
+  std::cout << std::endl;
+}
+
+void displayFormulasPositive(int nb, char sign, double b, double delta,
+                             double denum) {
+  std::cout << "x" << nb << "	= (-b " << sign << " √delta)/2a" << std::endl;
+  std::cout << "x" << nb << "	= (" << -b << " " << sign << " " << delta
+            << ")/" << denum << std::endl;
+  std::cout << "x" << nb << "	= ";
+}
+
+void Solver::secondDegreePositive(double b, double delta, double denumerator) {
+  double squareRootDelta = mysqrt(delta);
+  double secondNumerator = -b - squareRootDelta;
+  double numerator = -b + squareRootDelta;
+
+  std::cout << "Discriminant is strictly positive, the two solutions are:"
+            << std::endl;
+#if BONUS
+  displayFormulasPositive(1, '+', b, squareRootDelta, denumerator);
+  if (numerator == int(numerator) && denumerator == int(denumerator) &&
+      secondNumerator == int(secondNumerator)) {
+    displayFractions(numerator, denumerator);
+    std::cout << std::endl << std::endl;
+    displayFormulasPositive(2, '-', b, squareRootDelta, denumerator);
+    displayFractions(secondNumerator, denumerator);
+    std::cout << std::endl;
+    return;
+  }
+#endif
+  std::cout << (numerator / denumerator) << std::endl;
+#if BONUS
+  std::cout << std::endl;
+  displayFormulasPositive(2, '-', b, squareRootDelta, denumerator);
+#endif
+  std::cout << (secondNumerator / denumerator) << std::endl;
+}
+
+void displayFormulasNegative(int nb, char sign, double b, double delta,
+                             double denum) {
+  std::cout << "x" << nb << "	= (-b " << sign << " i√-delta)/2a" << std::endl;
+  std::cout << "x" << nb << "	= (" << -b << " " << sign << " i√" << -delta
+            << ")/" << denum << std::endl;
+  std::cout << "x" << nb << "	= ";
+}
+
+void Solver::secondDegreeNegative(double b, double delta, double denumerator) {
+  double numerator = -b;
+  double realPart = numerator / denumerator;
+  double imaginaryPart = mysqrt(-delta) / denumerator;
+
+  std::cout
+      << "Discriminant is strictly negative, the two complex solutions are:"
+      << std::endl;
+#if BONUS
+  if (numerator == int(numerator) && denumerator == int(denumerator)) {
+    displayFormulasNegative(1, '+', b, delta, denumerator);
+    if (realPart != 0) {
+      displayFractions(numerator, denumerator);
+      std::cout << " + ";
+    }
+    std::cout << "i * " << imaginaryPart << std::endl;
+    std::cout << std::endl;
+    displayFormulasNegative(2, '-', b, delta, denumerator);
+    if (realPart != 0) displayFractions(numerator, denumerator);
+    std::cout << " - i * " << imaginaryPart << std::endl;
+  }
+#else
+  if (realPart != 0) std::cout << realPart << " + ";
+  std::cout << "i * " << imaginaryPart << std::endl;
+  if (realPart != 0) std::cout << realPart;
+  std::cout << " - i * " << imaginaryPart << std::endl;
+#endif
+}
+
 void Solver::secondDegree() {
   double a = findNumberWithPower(2);
   double b = findNumberWithPower(1);
   double c = findNumberWithPower(0);
-  double numerator, denumerator = (2 * a);
+  double denumerator = (2 * a);
   double delta = ((b * b) - ((4 * a) * c));
 
+#if BONUS
+  std::cout << "a		= " << a << std::endl;
+  std::cout << "b		= " << b << std::endl;
+  std::cout << "c		= " << c << std::endl;
+  std::cout << "Discriminant 	= b² - 4ac " << std::endl;
+  std::cout << "		= " << b << "² - 4 * " << a << " * " << c
+            << std::endl;
+  std::cout << "		= " << (b * b) << " - " << ((4 * a) * c)
+            << std::endl;
+  std::cout << "		= " << ((b * b) - ((4 * a) * c)) << std::endl;
+#endif
+
   if (delta == 0) {
-    numerator = -b;
-
-    std::cout << "Discriminant is neutral, the solution is:" << std::endl;
-    if (numerator == int(numerator) && denumerator == int(denumerator))
-      displayFractions(numerator, denumerator);
-    else
-      std::cout << (numerator / denumerator);
-    std::cout << std::endl;
-  } else if (delta > 0) {
-    double secondNumerator = -b + mysqrt(delta);
-    numerator = -b - mysqrt(delta);
-
-    std::cout << "Discriminant is strictly positive, the two solutions are:"
-              << std::endl;
-    if (numerator == int(numerator) && denumerator == int(denumerator) &&
-        secondNumerator == int(secondNumerator)) {
-      displayFractions(numerator, denumerator);
-      std::cout << std::endl;
-      displayFractions(secondNumerator, denumerator);
-      std::cout << std::endl;
-    } else {
-      std::cout << (numerator / denumerator) << std::endl;
-      std::cout << (secondNumerator / denumerator) << std::endl;
-    }
-  } else if (delta < 0) {
-    numerator = -b;
-    double realPart = numerator / denumerator;
-    double imaginaryPart = mysqrt(-delta) / denumerator;
-
-    std::cout
-        << "Discriminant is strictly negative, the two complex solutions are:"
-        << std::endl;
-
-    if (numerator == int(numerator) && denumerator == int(denumerator)) {
-      if (realPart != 0) {
-        displayFractions(numerator, denumerator);
-        std::cout << " + ";
-      }
-      std::cout << "i * " << imaginaryPart << std::endl;
-      if (realPart != 0) displayFractions(numerator, denumerator);
-      std::cout << " - i * " << imaginaryPart << std::endl;
-    } else {
-      if (realPart != 0) std::cout << realPart << " + ";
-      std::cout << "i * " << imaginaryPart << std::endl;
-      if (realPart != 0) std::cout << realPart;
-      std::cout << " - i * " << imaginaryPart << std::endl;
-    }
-  }
+    secondDegreeNeutral(b, denumerator);
+  } else if (delta > 0)
+    secondDegreePositive(b, delta, denumerator);
+  else if (delta < 0)
+    secondDegreeNegative(b, delta, denumerator);
 }
 
 void Solver::displayFractions(double numerator, double denumerator) {
-  if (numerator == 0 || denumerator == 0) {
+  if ((numerator == 0 || denumerator == 0) || denumerator == 1) {
     std::cout << numerator / denumerator;
     return;
   }
@@ -141,8 +208,9 @@ void Solver::displayFractions(double numerator, double denumerator) {
     while (num != numerator) {
       double den = num * factor;
       if (num == int(num) && den == int(den)) {
-        std::cout << num << "/" << den;
-        return;
+        numerator = num;
+        denumerator = den;
+        break;
       }
       if (numerator > 0)
         num++;
@@ -154,8 +222,9 @@ void Solver::displayFractions(double numerator, double denumerator) {
     while (den != denumerator) {
       double num = den / factor;
       if (num == int(num) && den == int(den)) {
-        std::cout << num << "/" << den;
-        return;
+        numerator = num;
+        denumerator = den;
+        break;
       }
       if (denumerator > 0)
         den++;
@@ -163,7 +232,10 @@ void Solver::displayFractions(double numerator, double denumerator) {
         den--;
     }
   }
-  std::cout << numerator << "/" << denumerator;
+  if (denumerator != 1)
+    std::cout << numerator << "/" << denumerator;
+  else
+    std::cout << numerator / denumerator;
 }
 
 void Solver::simplifyOperators(Member& side) {

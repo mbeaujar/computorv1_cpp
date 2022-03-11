@@ -3,6 +3,9 @@
 #include "Parser.hpp"
 #include "Solver.hpp"
 
+#ifndef BONUS
+#define BONUS 0
+#endif
 #define SUCCESS 0
 #define FAILURE 1
 

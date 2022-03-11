@@ -51,7 +51,6 @@ Parser::Parser(std::string eq) : _left(NONE), _first(), _second(), _degree(1) {
     throw InvalidFormatEntry("Invalid operator at the end");
   if (firstMember == true)
     throw InvalidFormatEntry("Invalid format (equal sign missing)");
-
   // Member::iterator it = _first.begin(), ite = _first.end();
   // while (it != ite) {
   //   std::cout << *it << " ";
@@ -76,9 +75,6 @@ void Parser::setOperator(char c) {
     case '-':
       _left = MINUS;
       break;
-    // case '/':
-    //   _left = DIV;
-    //   break;
     case '*':
       _left = MUL;
       break;
@@ -119,8 +115,6 @@ void Parser::parseTerm(Member& side, std::string& eq, size_t& i) {
         size_t after_deno = skip_number(eq, j);
         double denominator =
             std::stod(eq.substr(j, after_deno - j), &after_deno);
-        std::cout << "value: " << value << std::endl;
-        std::cout << "denorminator: " << value << std::endl;
         if (value != 0) value /= denominator;
         j += after_deno;
       }
